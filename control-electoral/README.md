@@ -5,12 +5,12 @@ Aplicación web para la gestión y control de procesos electorales con funcional
 ## Arquitectura
 
 ```
-Internet (http://elecciones.sigecloud.com)
+Internet (https://elecciones.sigecloud.com)
    │
    ▼
 ┌─────────────────────────────────────────────┐
 │          Host Nginx (Reverse Proxy)          │
-│          Puerto 80/443                       │
+│          Puerto 443 (HTTPS)                  │
 │                ↓                            │
 │          localhost:8090                     │
 └─────────────────────────────────────────────┘
@@ -31,7 +31,7 @@ Internet (http://elecciones.sigecloud.com)
 
 **Frontend** es el ÚNICO punto de acceso externo dentro de Docker. Backend y DB son servicios internos en red Docker.
 
-**Nota:** El puerto 8090 de Docker es para comunicación interna del host. El usuario final accede vía el nginx del host en puerto 80/443.
+**Nota:** El puerto 8090 de Docker es para comunicación interna del host. El usuario final accede vía HTTPS (puerto 443).
 
 ## Credenciales
 

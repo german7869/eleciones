@@ -43,12 +43,12 @@ curl http://elecciones.sigecloud.com
 ## Arquitectura
 
 ```
-Internet (http://elecciones.sigecloud.com)
+Internet (https://elecciones.sigecloud.com)
    │
    ▼
 ┌─────────────────────────────┐
 │  Host Nginx (Reverse Proxy) │
-│  Puerto 80/443             │
+│  Puerto 443 (HTTPS)         │
 │       ↓                     │
 │  localhost:8090            │
 └─────────────────────────────┘
@@ -91,7 +91,7 @@ Internet
 
 - El backend NO está expuesto al exterior, solo accesible vía el frontend
 - La base de datos NO está expuesta, solo accesible por el backend
-- CORS está configurado para elecciones.sigecloud.com (sin puerto, porque el usuario accede vía nginx en puerto 80/443)
+- CORS está configurado para https://elecciones.sigecloud.com (acceso HTTPS final)
 - Las migraciones y usuario admin se crean automáticamente
 - Para HTTPS, se requiere configurar certificados SSL (no incluido)
 - El puerto 8090 es solo para comunicación interna: nginx (host) → frontend (Docker)
