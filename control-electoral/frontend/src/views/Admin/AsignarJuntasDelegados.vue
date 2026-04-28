@@ -223,8 +223,8 @@ const cargar_datos = async () => {
     error.value = ''
     
     const [delegadosRes, juntasRes] = await Promise.all([
-      axios.get('http://localhost:8000/delegados/'),
-      axios.get('http://localhost:8000/juntas/')
+      axios.get('/api/delegados/'),
+      axios.get('/api/juntas/')
     ])
     
     delegados.value = delegadosRes.data.filter((d: Delegado) => d.rol === 'delegado')
@@ -242,7 +242,7 @@ const cargar_datos = async () => {
 const asignar_junta = async (junta: Junta) => {
   try {
     await axios.post(
-      `http://localhost:8000/juntas/${junta.id}/asignar-delegado`,
+      `/api/juntas/${junta.id}/asignar-delegado`,
       { delegado_id: delegadoSeleccionado.value?.id }
     )
     
@@ -258,7 +258,7 @@ const asignar_junta = async (junta: Junta) => {
 const desasignar_junta = async (junta: Junta) => {
   try {
     await axios.post(
-      `http://localhost:8000/juntas/${junta.id}/desasignar-delegado`
+      `/api/juntas/${junta.id}/desasignar-delegado`
     )
     
     junta.delegado_id = undefined

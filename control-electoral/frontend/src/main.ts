@@ -4,8 +4,8 @@ import './index.css';
 import router from './router';
 import axios from 'axios';
 
-// Base URL del backend
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Base URL: usar /api para que nginx haga proxy al backend
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || '/api';
 
 // Adjuntar token JWT en cada petición
 axios.interceptors.request.use((config) => {

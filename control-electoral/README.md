@@ -163,9 +163,31 @@ control-electoral/
 └── README.md
 ```
 
+## Configuración de Nginx en el Host (HTTPS)
+
+Para configurar el reverse proxy en el host con SSL:
+
+1. Instalar certbot:
+```bash
+sudo apt-get install certbot python3-certbot-nginx -y
+```
+
+2. Generar certificado SSL:
+```bash
+sudo certbot --nginx -d elecciones.sigecloud.com
+```
+
+3. Copiar la configuración de nginx:
+```bash
+sudo cp host-nginx-elecciones.conf /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/host-nginx-elecciones.conf /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
 ## Tecnologías
 
 - **Frontend:** Vue.js 3, TypeScript, Tailwind CSS, Vite, Chart.js
-- **Backend:** FastAPI, Python 3.11, SQLAlchemy, Pydantic
+- **Backend:** FastAPI, Python 3.12, SQLAlchemy, Pydantic
 - **Base de datos:** PostgreSQL 17
 - **Web server:** Nginx (Alpine)

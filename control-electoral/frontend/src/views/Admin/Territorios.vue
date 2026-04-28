@@ -275,7 +275,7 @@ function descargarEjemplo(filename: string) {
   // Crear un elemento <a> temporal para descargar
   const link = document.createElement('a');
   // Usar la URL completa del backend
-  const baseURL = axios.defaults.baseURL || 'http://localhost:8000';
+  const baseURL = axios.defaults.baseURL || '/api';
   link.href = `${baseURL}/ejemplos/${filename}`;
   link.download = filename;
   link.target = '_blank';

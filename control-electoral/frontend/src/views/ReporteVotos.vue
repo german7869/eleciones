@@ -218,12 +218,12 @@ const cargarEstadoJunta = async () => {
 
   try {
     // Obtener estado de la junta
-    const juntaRes = await axios.get(`http://localhost:8000/juntas/${juntaId.value}`)
+    const juntaRes = await axios.get(`/api/juntas/${juntaId.value}`)
     const junta = juntaRes.data
     estadoJunta.value = junta.estado || 'pendiente'
 
     // Cargar candidatos
-    const candidatosRes = await axios.get('http://localhost:8000/partidos/candidatos/')
+    const candidatosRes = await axios.get('/api/partidos/candidatos/')
     votos.value = candidatosRes.data.map((c: any) => ({ 
       candidato_id: c.id, 
       nombre: c.nombre, 
@@ -237,7 +237,7 @@ const cargarEstadoJunta = async () => {
     // Si junta está procesada, cargar votos existentes
     if (estadoJunta.value === 'procesada') {
       try {
-        const votosRes = await axios.get(`http://localhost:8000/votos/junta/${juntaId.value}`)
+        const votosRes = await axios.get(`/api/votos/junta/${juntaId.value}`)
         for (const voto of votosRes.data) {
           const idx = votos.value.findIndex(v => v.candidato_id === voto.candidato_id)
           if (idx >= 0) {
@@ -247,7 +247,7 @@ const cargarEstadoJunta = async () => {
 
         // Cargar resumen
         try {
-          const resumenRes = await axios.get(`http://localhost:8000/votos/resumen/${juntaId.value}`)
+          const resumenRes = await axios.get(`/api/votos/resumen/${juntaId.value}`)
           nulos.value = resumenRes.data.votos_nulos
           blancos.value = resumenRes.data.votos_blancos
           totalVotantes.value = resumenRes.data.total_votantes
@@ -266,12 +266,12 @@ onMounted(async () => {
     // Cargar juntas según rol
     let juntasRes
     if (userRol.value === 'delegado') {
-      juntasRes = await axios.get('http://localhost:8000/juntas/mis-juntas')
+      juntasRes = await axios.get('/api/juntas/mis-juntas')
     } else {
-      juntasRes = await axios.get('http://localhost:8000/juntas/')
+      juntasRes = await axios.get('/api/juntas/')
     }
     
-    const recintosRes = await axios.get('http://localhost:8000/recintos/')
+    const recintosRes = await axios.get('/api/recintos/')
     const recintoMap: Record<number, string> = {}
     for (const r of recintosRes.data) recintoMap[r.id] = r.nombre
     
@@ -322,7 +322,7 @@ async function enviarReporte() {
   try {
     // Enviar votos por candidato (upsert en backend)
     for (const v of votos.value) {
-      await axios.post('http://localhost:8000/votos/', {
+      await axios.post('/api/votos/', {
         junta_id: juntaId.value,
         candidato_id: v.candidato_id,
         nro_votos: v.nro_votos,
@@ -330,7 +330,7 @@ async function enviarReporte() {
     }
 
     // Enviar resumen de nulos y blancos
-    await axios.post('http://localhost:8000/votos/resumen/', {
+    await axios.post('/api/votos/resumen/', {
       junta_id: juntaId.value,
       votos_nulos: nulos.value,
       votos_blancos: blancos.value,
@@ -338,7 +338,7 @@ async function enviarReporte() {
     })
 
     // Marcar junta como procesada
-    await axios.post(`http://localhost:8000/juntas/${juntaId.value}/marcar-procesada`)
+    await axios.post(`/api/juntas/${juntaId.value}/marcar-procesada`)
 
     ok.value = true
     estadoJunta.value = 'procesada'
@@ -346,11 +346,11 @@ async function enviarReporte() {
     // Recargar juntas para actualizar estados
     const juntasRes = await axios.get(
       isDelegado.value 
-        ? 'http://localhost:8000/juntas/mis-juntas'
-        : 'http://localhost:8000/juntas/'
+        ? '/api/juntas/mis-juntas'
+        : '/api/juntas/'
     )
     const recintoMap: Record<number, string> = {}
-    const recintosRes = await axios.get('http://localhost:8000/recintos/')
+    const recintosRes = await axios.get('/api/recintos/')
     for (const r of recintosRes.data) recintoMap[r.id] = r.nombre
     
     juntas.value = juntasRes.data.map((j: any) => ({

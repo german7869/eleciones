@@ -190,11 +190,11 @@ const cargar_datos = async () => {
     loading.value = true
 
     // Cargar parroquias
-    const parroquiasRes = await axios.get('http://localhost:8000/parroquias/')
+    const parroquiasRes = await axios.get('/api/parroquias/')
     parroquias.value = parroquiasRes.data
 
     // Cargar juntas
-    const juntasRes = await axios.get('http://localhost:8000/juntas/')
+    const juntasRes = await axios.get('/api/juntas/')
     
     // Enriquecer juntas con información de delegados y votos
     const juntasEnriquecidas = await Promise.all(
@@ -205,27 +205,27 @@ const cargar_datos = async () => {
 
         if (junta.delegado_id) {
           try {
-            const delRes = await axios.get(`http://localhost:8000/delegados/${junta.delegado_id}`)
+            const delRes = await axios.get(`/api/delegados/${junta.delegado_id}`)
             delegado_nombre = delRes.data.nombre
           } catch {}
         }
 
         // Obtener votos
         try {
-          const votosRes = await axios.get(`http://localhost:8000/votos/junta/${junta.id}`)
+          const votosRes = await axios.get(`/api/votos/junta/${junta.id}`)
           total_votos = votosRes.data.length
         } catch {}
 
         // Obtener parroquia
         if (junta.recinto_id) {
           try {
-            const recintoRes = await axios.get(`http://localhost:8000/recintos/${junta.recinto_id}`)
+            const recintoRes = await axios.get(`/api/recintos/${junta.recinto_id}`)
             const recinto = recintoRes.data
             if (recinto.zona_id) {
-              const zonaRes = await axios.get(`http://localhost:8000/zonas/${recinto.zona_id}`)
+              const zonaRes = await axios.get(`/api/zonas/${recinto.zona_id}`)
               const zona = zonaRes.data
               if (zona.parroquia_id) {
-                const parRes = await axios.get(`http://localhost:8000/parroquias/${zona.parroquia_id}`)
+                const parRes = await axios.get(`/api/parroquias/${zona.parroquia_id}`)
                 parroquia_nombre = parRes.data.nombre
               }
             }

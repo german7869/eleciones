@@ -139,7 +139,7 @@ const juntasProcesadas = ref(0)
 const cargarJuntas = async () => {
   try {
     loading.value = true
-    const response = await axios.get('http://localhost:8000/juntas/mis-juntas')
+    const response = await axios.get('/api/juntas/mis-juntas')
     juntas.value = response.data
   } catch (err: any) {
     error('Error al cargar juntas: ' + (err.response?.data?.detail || err.message))
@@ -171,7 +171,7 @@ const subirAccta = async () => {
     formData.append('file', fileSeleccionado.value)
     formData.append('junta_id', String(juntaSeleccionada.value.id))
 
-    const response = await axios.post('http://localhost:8000/upload-acta', formData, {
+    const response = await axios.post('/api/upload-acta', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
 

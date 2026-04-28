@@ -142,7 +142,7 @@ const cargar_delegados = async () => {
   try {
     loading.value = true
     error.value = ''
-    const response = await axios.get('http://localhost:8000/delegados/')
+    const response = await axios.get('/api/delegados/')
     delegados.value = response.data
   } catch (err: any) {
     error.value = err.response?.data?.detail || 'Error al cargar delegados'
@@ -192,7 +192,7 @@ const guardar_nueva_clave = async () => {
   try {
     guardando.value = true
     await axios.post(
-      `http://localhost:8000/delegados/${delegadoSeleccionado.value?.id}/cambiar-clave`,
+      `/api/delegados/${delegadoSeleccionado.value?.id}/cambiar-clave`,
       { nueva_clave: nuevaClave.value }
     )
     

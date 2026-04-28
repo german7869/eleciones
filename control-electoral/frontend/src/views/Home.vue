@@ -176,7 +176,7 @@ const isAdmin = computed(() => getRol() === 'admin')
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:8000/dashboard/')
+    const res = await axios.get('/api/dashboard/')
     stats.value = res.data
   } catch {
     // sin datos aún
