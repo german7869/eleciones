@@ -1,0 +1,5 @@
+codigo,nombre,zona_codigo,direccion,nro_votantes
+R001,Recinto 1,Z001,Calle 1 #123,1000
+R002,Recinto 2,Z001,Calle 2 #456,1100
+R003,Recinto 3,Z002,Calle 3 #789,950
+R004,Recinto 4,Z003,Calle 4 #234,1050

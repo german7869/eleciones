@@ -1,0 +1,5 @@
+codigo,nombre,nro_votantes,tipo,recinto_codigo,numero
+J001,Junta 1,100,M,R001,001
+J002,Junta 2,110,F,R001,002
+J003,Junta 3,120,M,R002,001
+J004,Junta 4,95,F,R003,001

@@ -1,8 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from app.utils.db import Base
 
 class Delegado(Base):
     __tablename__ = "delegados"
@@ -10,4 +8,6 @@ class Delegado(Base):
     nombre = Column(String, nullable=False)
     cedula = Column(String, unique=True, nullable=False)
     telefono = Column(String, nullable=True)
+    password = Column(String, nullable=False, default="")
+    rol = Column(String, nullable=False, default="delegado")  # "admin" | "delegado"
     juntas = relationship("Junta", backref="delegado")

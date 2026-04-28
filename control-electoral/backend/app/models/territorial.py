@@ -1,13 +1,15 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from app.utils.db import Base
 import enum
-
-Base = declarative_base()
 
 class TipoJuntaEnum(str, enum.Enum):
     masculino = "m"
     femenino = "f"
+
+class EstadoJuntaEnum(str, enum.Enum):
+    pendiente = "pendiente"
+    procesada = "procesada"
 
 class Parroquia(Base):
     __tablename__ = "parroquias"
@@ -52,3 +54,4 @@ class Junta(Base):
     tipo = Column(Enum(TipoJuntaEnum), nullable=False)
     nro_votantes = Column(Integer, default=0)
     delegado_id = Column(Integer, ForeignKey("delegados.id"), nullable=True)
+    estado = Column(Enum(EstadoJuntaEnum), default=EstadoJuntaEnum.pendiente, nullable=False)

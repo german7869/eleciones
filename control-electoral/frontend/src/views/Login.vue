@@ -19,13 +19,28 @@ const password = ref('');
 const error = ref('');
 const router = useRouter();
 
+function getRol(token: string): string {
+  try {
+    return JSON.parse(atob(token.split('.')[1])).rol || '';
+  } catch { return ''; }
+}
+
 async function login() {
   error.value = '';
   try {
     const res = await axios.post('/auth/login', { cedula: cedula.value, password: password.value });
     localStorage.setItem('token', res.data.access_token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`;
-    router.push('/reporte');
+    
+    // Redirigir según rol
+    const rol = getRol(res.data.access_token);
+    if (rol === 'admin') {
+      router.push('/');
+    } else if (rol === 'delegado') {
+      router.push('/ingreso-votos');
+    } else {
+      router.push('/');
+    }
   } catch (e: any) {
     error.value = e.response?.data?.detail || 'Error de autenticación';
   }
