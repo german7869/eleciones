@@ -1,0 +1,50 @@
+version: '3.8'
+
+# Producción: Frontend es el ÚNICO punto de acceso externo (puerto 8090)
+# Backend y DB son servicios internos (no exponen puertos al host)
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: control_electoral
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    command: ./entrypoint.sh
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+    # SIN puertos: solo accesible vía frontend (proxy)
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8090:8090"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    # ÚNICO servicio con puerto expuesto al host
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata:

@@ -81,6 +81,10 @@ if __name__ == "__main__":
         print("✗ No se pudo conectar a la base de datos")
         sys.exit(1)
     
+    # Leer credenciales desde variables de entorno
+    admin_email = os.getenv("ADMIN_EMAIL", "germandase@gmail.com")
+    admin_password = os.getenv("ADMIN_PASSWORD", "jedase7869")
+    
     # Crear usuario administrador
-    success = create_admin_user("germandase@gmail.com", "jedase7869")
+    success = create_admin_user(admin_email, admin_password)
     sys.exit(0 if success else 1)

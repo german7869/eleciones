@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   db:
     image: postgres:15
@@ -11,17 +12,25 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
-    build: .
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    build: ./backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
-      - .:/app
+      - ./backend:/app
     ports:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/control_electoral
       - CORS_ORIGINS=http://localhost:5173,http://localhost:5174
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
 volumes:
   pgdata:
