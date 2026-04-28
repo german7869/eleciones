@@ -1,10 +1,8 @@
-version: '3.8'
-
 # Producción: Frontend es el ÚNICO punto de acceso externo (puerto 8090)
 # Backend y DB son servicios internos (no exponen puertos al host)
 services:
   db:
-    image: postgres:latest
+    image: postgres:17
     restart: always
     environment:
       POSTGRES_USER: postgres

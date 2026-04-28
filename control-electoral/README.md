@@ -108,7 +108,7 @@ cd frontend && npm run dev
 |----------|-------------|----------------|---------------|
 | frontend | Vue.js + Nginx (proxy a /api) | 80 | 8090 |
 | backend | FastAPI | 8000 | - (solo red Docker) |
-| db | PostgreSQL (latest) | 5432 | - (solo red Docker) |
+| db | PostgreSQL 17 | 5432 | - (solo red Docker) |
 
 ## Migraciones
 
@@ -167,5 +167,5 @@ control-electoral/
 
 - **Frontend:** Vue.js 3, TypeScript, Tailwind CSS, Vite, Chart.js
 - **Backend:** FastAPI, Python 3.11, SQLAlchemy, Pydantic
-- **Base de datos:** PostgreSQL (latest)
+- **Base de datos:** PostgreSQL 17
 - **Web server:** Nginx (Alpine)
