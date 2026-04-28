@@ -5,10 +5,21 @@ Aplicación web para la gestión y control de procesos electorales con funcional
 ## Arquitectura
 
 ```
+Internet (http://elecciones.sigecloud.com)
+   │
+   ▼
 ┌─────────────────────────────────────────────┐
-│          Puerto 8090 (Host)                │
+│          Host Nginx (Reverse Proxy)          │
+│          Puerto 80/443                       │
 │                ↓                            │
-│  Frontend Container (Nginx :8090)         │
+│          localhost:8090                     │
+└─────────────────────────────────────────────┘
+   │
+   ▼
+┌─────────────────────────────────────────────┐
+│     Docker: Puerto 8090 (Host) → 80 (Container)    │
+│                ↓                            │
+│  Frontend Container (Nginx :80)         │
 │    ├─ / → Vue.js App                      │
 │    └─ /api → proxy to backend             │
 │                ↓                            │
@@ -18,7 +29,9 @@ Aplicación web para la gestión y control de procesos electorales con funcional
 └─────────────────────────────────────────────┘
 ```
 
-**Frontend** es el ÚNICO punto de acceso externo. Backend y DB son servicios internos en red Docker.
+**Frontend** es el ÚNICO punto de acceso externo dentro de Docker. Backend y DB son servicios internos en red Docker.
+
+**Nota:** El puerto 8090 de Docker es para comunicación interna del host. El usuario final accede vía el nginx del host en puerto 80/443.
 
 ## Credenciales
 
@@ -71,8 +84,10 @@ docker compose logs -f
 
 ### Acceso
 ```
-http://elecciones.sigecloud.com:8090
+https://elecciones.sigecloud.com
 ```
+
+**Nota:** El puerto 8090 es solo para comunicación interna entre el nginx del host y Docker. El usuario accede vía HTTPS (puerto 443).
 
 ## Desarrollo
 
@@ -91,9 +106,9 @@ cd frontend && npm run dev
 
 | Servicio | Descripción | Puerto interno | Puerto externo |
 |----------|-------------|----------------|---------------|
-| frontend | Vue.js + Nginx (proxy a /api) | 8090 | 8090 |
-| backend | FastAPI (FastAPI) | 8000 | - (solo red Docker) |
-| db | PostgreSQL 15 | 5432 | - (solo red Docker) |
+| frontend | Vue.js + Nginx (proxy a /api) | 80 | 8090 |
+| backend | FastAPI | 8000 | - (solo red Docker) |
+| db | PostgreSQL (latest) | 5432 | - (solo red Docker) |
 
 ## Migraciones
 
@@ -141,9 +156,9 @@ control-electoral/
 ├── frontend/
 │   ├── src/                 # Código Vue.js
 │   ├── Dockerfile           # Build de producción
-│   ├── nginx.conf           # Configuración nginx (puerto 8090)
+│   ├── nginx.conf           # Configuración nginx (puerto 8090 interno)
 │   └── package.json
-├── docker-compose.yml       # Producción (frontend :8090)
+├── docker-compose.yml       # Producción (frontend :8090 en host)
 ├── docker-compose.dev.yml   # Desarrollo (puertos expuestos)
 └── README.md
 ```
@@ -152,5 +167,5 @@ control-electoral/
 
 - **Frontend:** Vue.js 3, TypeScript, Tailwind CSS, Vite, Chart.js
 - **Backend:** FastAPI, Python 3.11, SQLAlchemy, Pydantic
-- **Base de datos:** PostgreSQL 15
+- **Base de datos:** PostgreSQL (latest)
 - **Web server:** Nginx (Alpine)

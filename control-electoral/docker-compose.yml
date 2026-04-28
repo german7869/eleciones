@@ -4,7 +4,7 @@ version: '3.8'
 # Backend y DB son servicios internos (no exponen puertos al host)
 services:
   db:
-    image: postgres:15
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -35,7 +35,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "8090:8090"
+      - "8090:80"
     depends_on:
       - backend
     networks:
